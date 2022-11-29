@@ -1,11 +1,11 @@
 package com.eureka.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.xml.stream.events.Comment;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,12 +43,22 @@ public class IdeasController {
 		else return ideasRepo.findAll();
 //		return ideasRepo.findAll();
 	}
+	
+	@GetMapping("/ideas/recent")
+	public List<Idea> getRecentIdeas() {
+		
+		Pageable sortedPage = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdDate"));
+		Iterable<Idea> iterable = ideasRepo.findAll(sortedPage);
+		List<Idea> ideas = new ArrayList<>();
+		iterable.forEach(ideas::add);
+		return ideas;
+		
+//		return ideasRepo.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
+	}
 
 	@GetMapping("/ideas/{id}")
 	public Idea getIdeaById(@PathVariable String id) {
 		Idea idea = ideasRepo.findById(id).get();
-		List<Comments> lis = idea.getComments();
-		
 		return idea;
 	}
 

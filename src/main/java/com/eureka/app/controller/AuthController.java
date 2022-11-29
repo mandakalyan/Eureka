@@ -66,7 +66,7 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 		
-		User user = userRepository.findByEmail(loginRequest.getEmail()).get();
+		User user = userRepository.findByEmail(loginRequest.getEmail());
 		user.setActiveStatus(true);
 		userRepository.save(user);
 		

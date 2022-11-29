@@ -3,10 +3,12 @@ package com.eureka.app.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,30 +18,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eureka.app.model.Idea;
 import com.eureka.app.model.User;
+import com.eureka.app.repository.IdeasRepository;
 import com.eureka.app.repository.UserRepository;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class UserController {
 	@Autowired
 	UserRepository userRepo;
+	
+	@Autowired
+	IdeasRepository ideasRepo;
 	
 	@GetMapping("/users")
 	public List<User> getAllUsers(@RequestParam(required = false) String email) {
 
 		if (email != null) {
 			List<User> users = new ArrayList<>();
-			users.add(userRepo.findByEmail(email).get());
+			users.add(userRepo.findByEmail(email));
 			return users;
 		}
 		return userRepo.findAll();
 	}
 
-	@GetMapping("/users/{id}")
-	public Optional<User> getUserById(@PathVariable String id) {
-		
-		return userRepo.findById(id);
-	}
+//	@GetMapping("/users/{id}")
+//	public Optional<User> getUserById(@PathVariable String id) {
+//		
+//		return userRepo.findById(id);
+//	}
 
 	@PostMapping("/users")
 	public User createUser(@RequestBody User user) {
@@ -94,5 +102,20 @@ public class UserController {
 	@GetMapping("users/emailExists/{email}")
 	public boolean emailExists(@PathVariable String email) {
 		return userRepo.existsByEmail(email);
+	}
+	
+	@GetMapping("users/{userEmail}/{ideaId}")
+	public User addFavorite(@PathVariable String userEmail, @PathVariable String ideaId) {
+		Idea idea = ideasRepo.findById(ideaId).get();
+		User user = userRepo.findByEmail(userEmail);
+		Set<Idea> favorites = user.getFavorites();
+		favorites.add(idea);
+		user.setFavorites(favorites);
+		return user;
+	}
+	
+	@GetMapping("users/{email}")
+	public User getUserByEmail(@PathVariable String email) {
+		return userRepo.findByEmail(email);
 	}
 }

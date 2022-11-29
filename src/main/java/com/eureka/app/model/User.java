@@ -40,21 +40,21 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 	private boolean isActive;
 	private int rewards;
+	private Set<Idea> favorites = new HashSet<>();
 	
 	public User() {
 		super();
 	}
-	
-	public User(String fname, String lname, String email, String password, Set<Department> departments) {
-		super();
+
+	public User(@NotBlank @Size(max = 15) String fname, @NotBlank @Size(max = 20) String lname,
+			@NotBlank @Size(max = 50) @Email String email, @NotBlank @Size(min = 6, max = 40) String password,
+			@NotNull Set<Department> departments) {
 		this.fname = fname;
 		this.lname = lname;
 		this.email = email;
 		this.password = password;
 		this.departments = departments;
 	}
-	
-	
 
 	public String getId() {
 		return id;
@@ -121,6 +121,14 @@ public class User {
 
 	public void setRewards(int rewards) {
 		this.rewards = rewards;
+	}
+
+	public Set<Idea> getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(Set<Idea> favorites) {
+		this.favorites = favorites;
 	}
 	
 }
