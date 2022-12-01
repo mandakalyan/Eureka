@@ -40,6 +40,7 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 	private boolean isActive;
 	private int rewards;
+	@DBRef
 	private Set<Idea> favorites = new HashSet<>();
 	
 	public User() {
