@@ -1,14 +1,16 @@
 package com.eureka.app.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Comments" )
 public class Comments {
 	@Id
 	private String id;
+	@DBRef
+	private String ideaId;
 	private String commentText;
-	private User commentedBy;
 	
 	public Comments() {
 		super();
@@ -18,7 +20,7 @@ public class Comments {
 		super();
 		this.id = id;
 		this.commentText = commentText;
-		this.commentedBy = commentedBy;
+//		this.commentedBy = commentedBy;
 	}
 	
 	public String getId() {
@@ -33,12 +35,12 @@ public class Comments {
 	public void setCommentText(String commentText) {
 		this.commentText = commentText;
 	}
-	public User getCommentedBy() {
-		return commentedBy;
-	}
-	public void setCommentedBy(User commentedBy) {
-		this.commentedBy = commentedBy;
-	}
+//	public User getCommentedBy() {
+//		return commentedBy;
+//	}
+//	public void setCommentedBy(User commentedBy) {
+//		this.commentedBy = commentedBy;
+//	}
 	
 	
 }

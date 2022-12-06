@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Idea")
 public class Idea {
 	@Id
 	private String id;
+	
+	private String ideaId;
 	private String fname;
 	private String lname;
 	private String ideaTitle;
@@ -19,6 +20,8 @@ public class Idea {
 	private int likesCount;
 	private int commentsCount;
 	private int rewards;
+	
+//	@DBRef
 	private List<Comments> comments = new ArrayList<>();
 	private IStatus ideaStatus;
 	
@@ -26,11 +29,12 @@ public class Idea {
 		super();
 	}
 
-	public Idea(String id, String fname, String lname, String ideaTitle, String ideaDescription, String createdBy,
-			String createdDate, int likesCount, int commentsCount, int rewards, List<Likes> likes,
-			List<Comments> comments, IStatus ideaStatus) {
+	public Idea(String id, String ideaId, String fname, String lname, String ideaTitle, String ideaDescription,
+			String createdDate, int likesCount, int commentsCount, int rewards, List<Comments> comments,
+			IStatus ideaStatus) {
 		super();
 		this.id = id;
+		this.ideaId = ideaId;
 		this.fname = fname;
 		this.lname = lname;
 		this.ideaTitle = ideaTitle;
@@ -39,7 +43,6 @@ public class Idea {
 		this.likesCount = likesCount;
 		this.commentsCount = commentsCount;
 		this.rewards = rewards;
-//		this.likes = likes;
 		this.comments = comments;
 		this.ideaStatus = ideaStatus;
 	}
@@ -144,6 +147,16 @@ public class Idea {
 
 	public void setRewards(int rewards) {
 		this.rewards = rewards;
-	}	
+	}
+
+	public String getIdeaId() {
+		return ideaId;
+	}
+
+	public void setIdeaId(String ideaId) {
+		this.ideaId = ideaId;
+	}
+	
+	
 	
 }

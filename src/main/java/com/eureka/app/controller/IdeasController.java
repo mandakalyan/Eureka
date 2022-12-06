@@ -52,14 +52,20 @@ public class IdeasController {
 		List<Idea> ideas = new ArrayList<>();
 		iterable.forEach(ideas::add);
 		return ideas;
-		
-//		return ideasRepo.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
 	}
 
-	@GetMapping("/ideas/{id}")
-	public Idea getIdeaById(@PathVariable String id) {
-		Idea idea = ideasRepo.findById(id).get();
-		return idea;
+//	@GetMapping("/ideas/{id}")
+//	public Idea getIdeaById(@PathVariable String id) {
+//		Idea idea = ideasRepo.findById(id).get();
+//		return idea;
+//	}
+	
+	@GetMapping("/ideas/{ideaTitle}")
+	public List<Comments> getCommentsByIdeaTitle(@PathVariable String ideaTitle) {
+		Idea idea = ideasRepo.findByIdeaTitle(ideaTitle).get(0);
+		List<Comments> comments = new ArrayList<>();
+		comments.addAll(idea.getComments());
+		return comments;
 	}
 
 	@PostMapping("/ideas")
@@ -77,7 +83,7 @@ public class IdeasController {
 //		if (!myIdea.isPresent())
 //			new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //
-//		myIdea.get().setId(idea.getId());
+//		
 //		myIdea.get().setFname(idea.getFname());
 //		myIdea.get().setLname(idea.getLname());
 //		myIdea.get().setIdeaTitle(idea.getIdeaTitle());
