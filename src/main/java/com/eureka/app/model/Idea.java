@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Idea")
 public class Idea {
+	
+	@Transient
+    public static final String SEQUENCE_NAME = "ideas_sequence";
+	
 	@Id
 	private String id;
 	
@@ -28,6 +33,17 @@ public class Idea {
 	public Idea() {
 		super();
 	}
+
+	public Idea(String fname, String lname, String ideaTitle, String ideaDescription, String createdDate) {
+		super();
+		this.fname = fname;
+		this.lname = lname;
+		this.ideaTitle = ideaTitle;
+		this.ideaDescription = ideaDescription;
+		this.createdDate = createdDate;
+	}
+
+
 
 	public Idea(String id, String ideaId, String fname, String lname, String ideaTitle, String ideaDescription,
 			String createdDate, int likesCount, int commentsCount, int rewards, List<Comments> comments,
