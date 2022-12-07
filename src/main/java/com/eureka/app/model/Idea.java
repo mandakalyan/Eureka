@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Idea")
@@ -15,7 +16,7 @@ public class Idea {
 	
 	@Id
 	private String id;
-	
+	@Indexed(unique=true)
 	private String ideaId;
 	private String fname;
 	private String lname;

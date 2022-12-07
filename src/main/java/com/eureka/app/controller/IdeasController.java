@@ -59,7 +59,7 @@ public class IdeasController {
 	@GetMapping("/ideas/recent")
 	public List<Idea> getRecentIdeas() {
 		
-		Pageable sortedPage = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdDate"));
+		Pageable sortedPage = PageRequest.of(0, 6, Sort.by(Sort.Direction.DESC, "createdDate"));
 		Iterable<Idea> iterable = ideasRepo.findAll(sortedPage);
 		List<Idea> ideas = new ArrayList<>();
 		iterable.forEach(ideas::add);
