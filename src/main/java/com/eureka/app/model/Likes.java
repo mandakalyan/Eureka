@@ -9,33 +9,43 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Likes {
 	@Id
 	private String id;
-	private User likedBy;
-	
-	public Likes() {
-		super();
-	}
-
-	public Likes(String id, int likesCount, User likedBy) {
-		super();
-		this.id = id;
-		this.likedBy = likedBy;
-	}
-
+	private String  userId;
+	private String ideaId;
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public User getLikedBy() {
-		return likedBy;
+	public String getUserId() {
+		return userId;
 	}
-
-	public void setLikedBy(User likedBy) {
-		this.likedBy = likedBy;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
+	public String getIdeaId() {
+		return ideaId;
+	}
+	public void setIdeaId(String ideaId) {
+		this.ideaId = ideaId;
+	}
+	@Override
+	public String toString() {
+		return "Likes [id=" + id + ", userId=" + userId + ", ideaId=" + ideaId + "]";
+	}
+	public Likes(String id, String userId, String ideaId) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.ideaId = ideaId;
+	}
+	public Likes() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
 	
 	
 }

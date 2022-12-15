@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eureka.app.model.IStatus;
 import com.eureka.app.model.Idea;
 import com.eureka.app.model.User;
 import com.eureka.app.payload.request.IdeaRequest;
@@ -87,7 +90,7 @@ public class IdeasController {
 //	}
 	
 	@PostMapping("/ideas")
-	public ResponseEntity<Idea> createTutorial(@RequestBody IdeaRequest ideaReq) {
+	public ResponseEntity<Idea> createIdea(@RequestBody IdeaRequest ideaReq) {
     try {
     	int seqNumber = (int) SequenceGeneratorService.generateSequence(Idea.SEQUENCE_NAME);
     	String idString = "ID" + String.format("%05d", seqNumber);
@@ -105,7 +108,14 @@ public class IdeasController {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
         String createdDate = formatter.format(date);
         
-        Idea idea = new Idea(fname, lname, ideaReq.getIdeaTitle(), ideaReq.getIdeaDescription(), createdDate);
+       Idea idea = new Idea();
+        idea.setFname(fname);
+        idea.setLname(lname);
+        idea.setIdeaTitle(ideaReq.getIdeaTitle());
+        idea.setIdeaDescription(ideaReq.getIdeaDescription());
+        idea.setCreatedDate(createdDate);
+        idea.setUserId(user.getId());
+        idea.setIdeaStatus(IStatus.RAISED);
         idea.setIdeaId(idString);
         ideasRepo.save(idea);
         
@@ -114,27 +124,24 @@ public class IdeasController {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+	@PutMapping("ideas/{id}")
+	public ResponseEntity<Idea> updateIdea(@PathVariable String id,
+			@RequestBody Idea idea) {
+		
+		Optional<Idea> myIdea = ideasRepo.findById(id);
+		
+		if (!myIdea.isPresent())
+			new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-//	@PutMapping("ideas/{id}")
-//	public ResponseEntity<Idea> updateIdea(@PathVariable String id,
-//			@RequestBody Idea idea) {
-//		
-//		Optional<Idea> myIdea = ideasRepo.findById(id);
-//		
-//		if (!myIdea.isPresent())
-//			new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//
-//		
-//		myIdea.get().setFname(idea.getFname());
-//		myIdea.get().setLname(idea.getLname());
-//		myIdea.get().setIdeaTitle(idea.getIdeaTitle());
-//		myIdea.get().setIdeaDescription(idea.getIdeaDescription());
-//		myIdea.get().setLikesCount(idea.getLikesCount());
-//		myIdea.get().setCommentsCount(idea.getCommentsCount());
-//		myIdea.get().setLikes(idea.getLikes());
-//		myIdea.get().setComments(idea.getComments());
-//		return new ResponseEntity<>(ideasRepo.save(myIdea.get()), HttpStatus.OK);
-//	}
+		
+		
+		myIdea.get().setIdeaTitle(idea.getIdeaTitle());
+		myIdea.get().setIdeaDescription(idea.getIdeaDescription());
+		
+		return new ResponseEntity<>(ideasRepo.save(myIdea.get()), HttpStatus.OK);
+	}
+
+
 
 	@DeleteMapping("/ideas")
 	public ResponseEntity<HttpStatus> deleteAllIdeas() {
